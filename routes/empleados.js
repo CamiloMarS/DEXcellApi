@@ -18,8 +18,7 @@
   router.get("/inactivos", (req, res) => {
     let conn = connToDB();
     conn.query(employeesInactives, (err, result) => {
-      console.log(result.rows);
-      res.render("index", { data: JSON.stringify(result.rows) });
+      res.status(200).send(result.rows);
       disconnectDB(conn);
     });
   });
