@@ -1,35 +1,21 @@
-(function RoutesEmployees() {
-  const express = require("express");
-  const { connToDB, disconnectDB } = require("../conection"); //cadena de conexion con Postgres
-  const {
-    employeesActives,
-    employeesInactives,
-    employeesInformacion
-  } = require("../querys/empleados.js");
+//Express
+const express = require("express");
+//Crear una instancia para la ruta
+const router = express.Router();
+//Importar los controladores
+const {
+  getActiveEmployees,
+  getEmployees,
+  getHistoryEmployee
+} = require("../controllers/employees.js");
 
-  //Crear una instancia para la ruta
-  const router = express.Router();
+//Ruta principal
+router.get("/", (request, response) => {
+  response.status(200).send("Hello World");
+});
 
-  //Ruta principal
-  router.get("/", (request, response) => {
-    response.status(200).send("Hello World");
-  });
+router.get("/actives", getActiveEmployees);
+router.get("/employees", getEmployees);
+router.get("/history/:employeeId", getHistoryEmployee);
 
-  router.get("/inactivos", (req, res) => {
-    let conn = connToDB();
-    conn.query(employeesInactives, (err, result) => {
-      res.status(200).send(result.rows);
-      disconnectDB(conn);
-    });
-  });
-
-  router.get("/empleados", (req, res) => {
-    let conn = connToDB();
-    conn.query(employeesInformacion, (err, result) => {
-      res.status(200).send(result.rows);
-      disconnectDB(conn);
-    });
-  });
-
-  module.exports = router;
-})();
+module.exports = router;
