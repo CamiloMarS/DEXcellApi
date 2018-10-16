@@ -3,7 +3,8 @@ const query = require("../querys/index.js"); //La consulta
 const {
   employeesActives,
   employeesInformacion,
-  historyEmployee
+  historyEmployee,
+  queryCertifations
 } = require("../querys/empleados.js");
 
 //Consultar los empleados activos
@@ -34,9 +35,22 @@ function getHistoryEmployee(req, resp) {
   query(historyEmployee(employeeId), req, resp);
 }
 
+//Consultar el historial de certificaciones de un empleado
+function getHistoryCertificationsEmployee(req, resp) {
+  let employeeId = parseInt(req.params.employeeId);
+  if (employeeId === null || !Number.isInteger(employeeId)) {
+    resp
+      .status(300)
+      .send({ code: 300, message: "Invalid employee ID or is Null!" });
+    return;
+  }
+  query(queryCertifations(employeeId), req, resp);
+}
+
 module.exports = {
   getActiveEmployees,
   getInactiveEmployees,
   getEmployees,
-  getHistoryEmployee
+  getHistoryEmployee,
+  getHistoryCertificationsEmployee
 };
