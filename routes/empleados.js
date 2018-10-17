@@ -10,6 +10,7 @@ const {
   getHistoryCertificationsEmployee
 } = require("../controllers/employees.js");
 
+const { getUserList, getUser } = require("../controllers/usuarios.js");
 //Ruta principal
 router.get("/", (request, response) => {
   response.status(200).send(`
@@ -28,5 +29,8 @@ router.get(
   "/employee/history_certifications/:employeeId",
   getHistoryCertificationsEmployee
 );
+
+//Rutas para los usuarios
+router.get("/users", getUserList);
 
 module.exports = router;

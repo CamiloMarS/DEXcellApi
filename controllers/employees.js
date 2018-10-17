@@ -26,10 +26,10 @@ function getEmployees(req, resp) {
 function getHistoryEmployee(req, resp) {
   let employeeId = parseInt(req.params.employeeId);
   if (employeeId === null) {
-    resp.status(300).send({ code: 300, message: "Employee Id is null!" });
+    resp.status(400).send({ code: 300, message: "Employee Id is null!" });
     return;
   } else if (!Number.isInteger(employeeId)) {
-    resp.status(300).send({ code: 300, message: "Invalid Employe ID" });
+    resp.status(400).send({ code: 300, message: "Invalid Employe ID" });
     return;
   }
   query(historyEmployee(employeeId), req, resp);

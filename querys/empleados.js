@@ -64,7 +64,6 @@ module.exports = {
     INSERT INTO Empleados (activo, nombre, apellidos, fecha_ingreso, saldo_ingles, saldo_informacion, perfil, nivel, vigencia_saldo_idioma, vigencia_saldo_formacion) 
     VALUES (${activo}, '${nombre}',${apellidos}, '${ingreso_f}', ${saldoIngles}, ${saldoFormacion}, ${perfil}, ${nivel}, '${vigenciaIdioma}', '${vigenciaFormaciones}');
     `;
-  }.
+  }
   //INSERTAR APOYO
-
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const router = require("./routes/empleados.js");
+const router = require("./routes/index.js");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +26,7 @@ app.use((req, resp, next) => {
   next();
 });
 
-app.use("/api", router);
+app.use("/api/dexcell", router);
 
 app.listen(1908, () => {
   console.log("Node Server  running on http://localhost:1908");

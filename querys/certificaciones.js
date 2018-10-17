@@ -1,7 +1,6 @@
 const certifications = {
   getListCertifications: () => {
-    return;
-    `  SELECT *
+    return `  SELECT *
        FROM catalogo_certificaciones            
     `;
   },
@@ -20,7 +19,6 @@ const certifications = {
       console.log("No se puede agregar la certificación! ");
       return;
     }
-
     return `
         INSERT INTO catalogo_certificaciones (organismo, certificacion, costo_examen, apoyo_examen, bono_certificacion, link_validacion)
         VALUES ('w3school', 'JavaScript', 95, true, true, '');

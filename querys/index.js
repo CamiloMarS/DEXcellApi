@@ -2,14 +2,13 @@ const { connToDB, disconnectDB } = require("../conection"); //Metodos de conexio
 
 function query(sql, request, response) {
   let conn = connToDB(); //conexion
-
   conn.query(sql, (err, result) => {
     //Existe un error
     if (err) {
       //enviar el error y salir
       response
         .status(500)
-        .send({ code: 500, message: "Error al consultar" + err });
+        .send({ code: 500, message: "Error en la acción: " + err });
       return;
     }
 

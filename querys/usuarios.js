@@ -18,11 +18,18 @@ const usuarios = {
       console.log("Nada que insertar!");
       return;
     }
-    let { nombre, apellidos, foto, active, token_google, rol } = dataUser;
-    return `
+
+    if (
+      dataUser.hasOwnProperty("nombre") &&
+      dataUser.hasOwnProperty("token_google")
+    ) {
+      let { nombre, apellidos, foto, active, token_google, rol } = dataUser;
+
+      return `
         INSERT INTO d_usuarios (nombre, apellidos, foto, active, token_google, rol) values
         ('${nombre}', '${apellidos}', '${foto}', ${active}, '${token_google}', ${rol});    
     `;
+    }
   },
   deleteUser: idUser => {
     return !Number.isInteger(parseInt(idUser))
