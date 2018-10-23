@@ -6,10 +6,37 @@ const {
   historyEmployee,
   queryCertifations
 } = require("../querys/empleados.js");
+const { connToDB, disconnectDB } = require("../conection");
 
 //Consultar los empleados activos
 function getActiveEmployees(request, response) {
-  query(employeesActives, request, response);
+  let conn = connToDB();
+  let sql = employeesActives;
+
+  conn.query(sql, (err, result) => {
+    if (err) {
+      response.status(500).send({
+        status: 500,
+        message: err
+      });
+
+      disconnectDB(conn);
+      return;
+    }
+
+    disconnectDB(conn);
+
+    if (result.rowCount > 0) {
+      //Settear los valores
+      let data = result.rows;
+      response.status(200).send(data);
+    } else {
+      response.status(404).send({
+        status: 404,
+        message: "Not Found!"
+      });
+    }
+  });
 }
 
 //Consultar los empleados inactivos
@@ -19,7 +46,34 @@ function getInactiveEmployees(req, resp) {
 
 //Consultar los empleados, con su perfil y nivel
 function getEmployees(req, resp) {
-  query(employeesInformacion, req, resp);
+  let conn = connToDB();
+  let sql = employeesInformacion;
+
+  conn.query(sql, (err, result) => {
+    if (err) {
+      resp.status({ status: 401, message: err });
+      return;
+    }
+
+    const data = result.rowCount;
+
+    if (data > 0) {
+      const employees = result.rows.map((e, i) => {
+        const { employeeId, name, lastname, profile, level, dateAdmission } = e;
+        //Dar formato segun el Front
+        return {
+          employeeId,
+          fullname: `${name} ${lastname}`,
+          profile,
+          level,
+          dateAdmission: dateAdmission.toLocaleDateString("en-US")
+        };
+      });
+      resp.status(200).send(employees);
+    }
+  });
+
+  //query(employeesInformacion, req, resp);
 }
 
 //Consultar el historial del empleado

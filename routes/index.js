@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router(); //Crear la ruta
-
+const { postLogin } = require("../controllers/login");
 //Importar los controladores
 const { getUserList, getUser } = require("../controllers/usuarios");
 const {
@@ -12,6 +12,11 @@ const {
   getCertificationsList,
   getCertification
 } = require("../controllers/certifications");
+
+const { insertSupportEmployee } = require("../controllers/apoyo_empleado");
+const { authentification } = require("../middlewers/auth");
+
+/*=====================================================================*/
 
 //Ruta principal
 router.get("/", (request, response) => {
@@ -28,6 +33,8 @@ router.get("/", (request, response) => {
 router.get("/users", getUserList);
 router.get("/users/:userId", getUser);
 
+router.post("/login", authentification, postLogin);
+
 //Rutas de Empleados
 router.get("/employees", getEmployees);
 router.get("/employees/history/:employeeId", getHistoryEmployee);
@@ -39,5 +46,8 @@ router.get(
 //Rutas de certificaciones
 router.get("/certifications", getCertificationsList);
 router.get("/certifications/:idCertification", getCertification);
+
+//Rutas para apoyo de empleados
+router.post("/employeessupport", insertSupportEmployee);
 
 module.exports = router;

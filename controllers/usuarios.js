@@ -1,9 +1,35 @@
 const query = require("../querys/index.js");
 const usuarios = require("../querys/usuarios.js");
+const { connToDB, disconnectDB } = require("../conection");
 
 //Obtener lista de usuarios
 function getUserList(req, resp) {
-  query(usuarios.getUserList(), req, resp);
+  let conn = connToDB();
+  let sql = usuarios.getUserList();
+
+  conn.query(sql, (err, result) => {
+    if (err) {
+      resp.status(500).send({
+        status: 500,
+        message: err
+      });
+
+      disconnectDB(conn);
+      return;
+    }
+
+    if (result.rowCount > 0) {
+      disconnectDB(conn);
+      resp.status(200).send(result.rows);
+    } else {
+      disconnectDB(conn);
+
+      resp.status(404).send({
+        status: 404,
+        message: `Usuario no encontrado!`
+      });
+    }
+  });
 }
 
 //Obtener a un usuario
@@ -13,7 +39,32 @@ function getUser(req, resp) {
     resp.status(400).send({ status: 400, message: "Id no valido!." });
     return;
   }
-  query(usuarios.getUser(userId), req, resp);
+  //Realizar la consulta
+  let conn = connToDB();
+  let sql = usuarios.getUser(userId);
+
+  conn.query(sql, (err, result) => {
+    if (err) {
+      resp.status(500).send({
+        status: 500,
+        message: err
+      });
+      disconnectDB(conn);
+      return;
+    }
+
+    if (result.rowCount > 0) {
+      disconnectDB(conn);
+      resp.status(200).send(result.rows);
+    } else {
+      disconnectDB(conn);
+
+      resp.status(404).send({
+        status: 404,
+        message: `Usuario no encontrado!`
+      });
+    }
+  });
 }
 
 //Insertar a un nuevo usuario

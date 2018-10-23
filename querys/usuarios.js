@@ -37,6 +37,15 @@ const usuarios = {
       : `DELETE 
         FROM d_usuarios as u
         WHERE u.id_usuario = ${idUser};`;
+  },
+  getUserRol: nameUser => {
+    if (nameUser.length > 0) {
+      return `
+        SELECT rol  
+        FROM d_usuarios
+        WHERE nombre LIKE '%${nameUser}%' AND active = true;   
+      `;
+    }
   }
 };
 

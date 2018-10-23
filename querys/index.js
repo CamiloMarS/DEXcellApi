@@ -19,7 +19,6 @@ function query(sql, request, response) {
 
     disconnectDB(conn); //desconecta de session
   });
-  return;
 } //end function
 
 module.exports = query;
