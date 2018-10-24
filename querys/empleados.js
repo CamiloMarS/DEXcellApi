@@ -20,7 +20,7 @@ module.exports = {
   ON E.Nivel = N.id_nivel`,
   historyEmployee: idEmployee => {
     return `
-    SELECT ap.costo, ap.observaciones, ap.fecha_solicitud as "Solicitado el", us.nombre||', '||us.apellidos AS "Asignado por", tp.nombre as "Tipo Apoyo", tp.descripcion
+    SELECT ap.costo, ap.observaciones, ap.fecha_solicitud, us.nombre||', '||us.apellidos AS "asignado_por", tp.nombre as "tipo_apoyo", tp.descripcion
     FROM Apoyo_empleado AS ap
     INNER JOIN d_usuarios AS us
     ON ap.usuario = us.id_usuario

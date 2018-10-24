@@ -1,46 +1,33 @@
 "use strict";
-
-//Dependencias
-
 const jwt = require("jsonwebtoken");
+const { seed } = require("../middlewers/config");
 
 /*============= Autentificación =============*/
+//FUNCION QUE CREA EL TOKEN
 
 //FUNCION, VALIDAD SI EL TOKEN ENVIADO ES IGUAL AL QUE TENGO COMO CLIENTE
 const validToken = (req, resp, next) => {
   //Recuperar el token
-  let token = req.get("Authorization");
+  let token = req.headers["authorization"];
 
+  if (!token) {
+    resp.status(401).send({ status: 401, message: "Se necesita un token!" });
+    return;
+  }
   //Validarlo
-  jwt.verify(token, "my_secret_key", (err, data) => {
+  jwt.verify(token, seed, (err, data) => {
     if (err) {
-      //Token no valido
-      resp.sendStatus(403);
+      resp.status(403).send({ status: 403, message: err }); //Token no valido
       return;
     }
     //Continuar, todo bien
-    req.usuario = decoded.usuario;
-    next();
+    const { role } = data;
+    if (role === "ADMIN") {
+      next();
+    }
   });
 };
 
-// ESTA FUNCION RECIBE EL TOKEN DEL CLIENTE
-const authentification = (req, resp, next) => {
-  //Acceder la cabecera
-  const bearerHeader = req.headers["authorization"];
-
-  if (typeof bearerHeader !== "undefined") {
-    const portador = bearerHeader.split(" ");
-    const bearerToken = portador[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    //Enviar estatus de usuario no autorizado
-    resp.sendStatus(403);
-  }
-};
-
 module.exports = {
-  validToken,
-  authentification
+  validToken
 };

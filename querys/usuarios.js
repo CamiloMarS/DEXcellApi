@@ -1,7 +1,7 @@
 const usuarios = {
   getUserList: () => {
     return `
-        SELECT u.id_usuario as "Id", u.nombre as "name", u.apellidos as "lastname", u.foto as "avatar", u.active
+        SELECT u.id_usuario as "Id", u.nombre as "name", u.apellidos as "lastname", u.foto as "avatar", u.active, u.rol
         FROM d_usuarios as u;
     `;
   },
@@ -9,7 +9,7 @@ const usuarios = {
     return !Number.isInteger(parseInt(idUser))
       ? null
       : `
-    SELECT u.id_usuario as "Id", u.nombre as "name", u.apellidos as "lastname", u.foto as "avatar", u.active
+    SELECT u.id_usuario as "Id", u.nombre as "name", u.apellidos as "lastname", u.active, u.rol
     FROM d_usuarios as u
     WHERE u.id_usuario = ${idUser};`;
   },

@@ -86,7 +86,32 @@ function getHistoryEmployee(req, resp) {
     resp.status(400).send({ code: 300, message: "Invalid Employe ID" });
     return;
   }
-  query(historyEmployee(employeeId), req, resp);
+
+  //Realizar consulta
+  query(historyEmployee(employeeId), req, resp).then(history => {
+    //Array de objetos
+    if (history.length > 0 || history !== 0) {
+      const historyEmploye = history.map(curr => {
+        const {
+          costo,
+          observaciones,
+          fecha_solicitud,
+          asignado_por,
+          tipo_apoyo
+        } = curr;
+
+        //Dar formato a la respuesta
+        return {
+          requested: fecha_solicitud.toLocaleDateString("en-US"),
+          name: observaciones,
+          type: tipo_apoyo,
+          cost: costo,
+          registered_by: asignado_por
+        };
+      });
+      resp.status(200).send(historyEmploye); //Mandar los datos
+    }
+  });
 }
 
 //Consultar el historial de certificaciones de un empleado

@@ -1,24 +1,28 @@
 const { connToDB, disconnectDB } = require("../conection"); //Metodos de conexion con la bd
 
-function query(sql, request, response) {
-  let conn = connToDB(); //conexion
-  conn.query(sql, (err, result) => {
-    //Existe un error
-    if (err) {
-      //enviar el error y salir
-      response
-        .status(500)
-        .send({ code: 500, message: "Error en la acción: " + err });
-      return;
-    }
+const query = (sql, request, response) => {
+  try {
+    const conn = connToDB();
 
-    //La consulta no tiene datos
-    result.rowCount > 0
-      ? response.status(200).send(result.rows)
-      : response.status(404).send({ status: 404, message: "No Data" });
-
-    disconnectDB(conn); //desconecta de session
-  });
-} //end function
+    return conn
+      .query(sql)
+      .then(result => {
+        disconnectDB(conn); //Cerrar la conexion
+        if (result.rowCount > 0) return result.rows;
+        else
+          response.status(404).send({ status: 404, message: "No encontrado!" });
+      })
+      .catch(err => {
+        response
+          .status(500)
+          .send({ code: 500, message: "Error en la acción: " + err });
+        return;
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}; //end function
 
 module.exports = query;
+//Swagger ---> swagger.io
+//yaml

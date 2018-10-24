@@ -14,9 +14,7 @@ const {
 } = require("../controllers/certifications");
 
 const { insertSupportEmployee } = require("../controllers/apoyo_empleado");
-const { authentification } = require("../middlewers/auth");
-
-/*=====================================================================*/
+const { validToken } = require("../middlewers/auth");
 
 //Ruta principal
 router.get("/", (request, response) => {
@@ -32,24 +30,27 @@ router.get("/", (request, response) => {
 //RUTAS DE AUTENTIFICACIÓN Y LOGIN
 router.post("/login", assignToken);
 
-/************================ RUTAS ACCESIBLES SOLO SI ESTAS AUTENTIFICADP ===============****************/
+/***====== RUTAS ACCESIBLES SOLO SI ESTAS AUTENTIFICADP =======***/
+// :) --> La respuesta es como la quiere el front
+
 //Rutas de usuarios
-router.get("/users", getUserList);
-router.get("/users/:userId", getUser);
+router.get("/users", validToken, getUserList); // :)
+router.get("/users/:userId", validToken, getUser); // :)
 
 //Rutas de Empleados
-router.get("/employees", getEmployees);
-router.get("/employees/history/:employeeId", getHistoryEmployee);
-router.get(
-  "/employees/history/certifications/:employeeId",
-  getHistoryCertificationsEmployee
-);
+router.get("/employees", validToken, getEmployees); // :)
+router.get("/employees/history/:employeeId", validToken, getHistoryEmployee); // :)
+// router.get(
+//   "/employees/history/certifications/:employeeId",
+//   validToken,
+//   getHistoryCertificationsEmployee
+// );
 
-//Rutas de certificaciones
-router.get("/certifications", getCertificationsList);
-router.get("/certifications/:idCertification", getCertification);
+// //Rutas de certificaciones
+// router.get("/certifications", validToken, getCertificationsList);
+// router.get("/certifications/:idCertification", validToken, getCertification);
 
-//Rutas para apoyo de empleados
-router.post("/employeessupport", insertSupportEmployee);
+// //Rutas para apoyo de empleados
+// router.post("/employeessupport", insertSupportEmployee);
 
 module.exports = router;

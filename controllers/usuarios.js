@@ -4,30 +4,19 @@ const { connToDB, disconnectDB } = require("../conection");
 
 //Obtener lista de usuarios
 function getUserList(req, resp) {
-  let conn = connToDB();
   let sql = usuarios.getUserList();
-
-  conn.query(sql, (err, result) => {
-    if (err) {
-      resp.status(500).send({
-        status: 500,
-        message: err
+  query(sql, req, resp).then(result => {
+    if (result.length > 0) {
+      const list = result.map(user => {
+        const { Id, name, lastname, active, rol } = user;
+        return {
+          id: Id,
+          fullname: `${name} ${lastname}`,
+          active,
+          role: rol
+        };
       });
-
-      disconnectDB(conn);
-      return;
-    }
-
-    if (result.rowCount > 0) {
-      disconnectDB(conn);
-      resp.status(200).send(result.rows);
-    } else {
-      disconnectDB(conn);
-
-      resp.status(404).send({
-        status: 404,
-        message: `Usuario no encontrado!`
-      });
+      resp.status(200).send(list);
     }
   });
 }
@@ -40,30 +29,15 @@ function getUser(req, resp) {
     return;
   }
   //Realizar la consulta
-  let conn = connToDB();
   let sql = usuarios.getUser(userId);
-
-  conn.query(sql, (err, result) => {
-    if (err) {
-      resp.status(500).send({
-        status: 500,
-        message: err
-      });
-      disconnectDB(conn);
-      return;
-    }
-
-    if (result.rowCount > 0) {
-      disconnectDB(conn);
-      resp.status(200).send(result.rows);
-    } else {
-      disconnectDB(conn);
-
-      resp.status(404).send({
-        status: 404,
-        message: `Usuario no encontrado!`
-      });
-    }
+  query(sql, req, resp).then(user => {
+    const { Id, name, lastname, active, rol } = user[0];
+    resp.status(200).send({
+      id: Id,
+      fullname: `${name} ${lastname}`,
+      active,
+      rol
+    });
   });
 }
 
