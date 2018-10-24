@@ -30,7 +30,7 @@ router.get("/", (request, response) => {
 //RUTAS DE AUTENTIFICACIÓN Y LOGIN
 router.post("/login", assignToken);
 
-/***====== RUTAS ACCESIBLES SOLO SI ESTAS AUTENTIFICADP =======***/
+/***====== RUTAS ACCESIBLES SOLO SI ESTAS AUTENTIFICADO =======***/
 // :) --> La respuesta es como la quiere el front
 
 //Rutas de usuarios
@@ -40,6 +40,7 @@ router.get("/users/:userId", validToken, getUser); // :)
 //Rutas de Empleados
 router.get("/employees", validToken, getEmployees); // :)
 router.get("/employees/history/:employeeId", validToken, getHistoryEmployee); // :)
+
 // router.get(
 //   "/employees/history/certifications/:employeeId",
 //   validToken,
@@ -47,7 +48,7 @@ router.get("/employees/history/:employeeId", validToken, getHistoryEmployee); //
 // );
 
 // //Rutas de certificaciones
-// router.get("/certifications", validToken, getCertificationsList);
+router.get("/certifications", validToken, getCertificationsList);
 // router.get("/certifications/:idCertification", validToken, getCertification);
 
 // //Rutas para apoyo de empleados
