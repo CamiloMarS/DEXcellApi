@@ -38,12 +38,21 @@ const usuarios = {
         FROM d_usuarios as u
         WHERE u.id_usuario = ${idUser};`;
   },
-  getUserRol: nameUser => {
-    if (nameUser.length > 0) {
+  getUserRol: (nameUser, lastNameUser) => {
+    if (nameUser.length > 0 && lastNameUser.length > 0) {
       return `
-        SELECT rol  
+        SELECT id_usuario as "id" ,nombre as "name", apellidos as "lastname", rol as "role"
         FROM d_usuarios
-        WHERE nombre LIKE '%${nameUser}%' AND active = true;   
+        WHERE nombre LIKE '%${nameUser}%' OR apellidos LIKE '%${lastNameUser}%' AND active = true;   
+      `;
+    }
+  },
+  updateTokenUser: (idUser, token) => {
+    if (token.length > 0 && idUser !== null) {
+      return `
+          UPDATE d_usuarios
+          SET token_google = '${token}'
+          WHERE id_usuario = ${idUser};      
       `;
     }
   }

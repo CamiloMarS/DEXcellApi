@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router(); //Crear la ruta
-const { postLogin } = require("../controllers/login");
+const { assignToken } = require("../controllers/login");
 //Importar los controladores
 const { getUserList, getUser } = require("../controllers/usuarios");
 const {
@@ -29,11 +29,13 @@ router.get("/", (request, response) => {
     `);
 });
 
+//RUTAS DE AUTENTIFICACIÓN Y LOGIN
+router.post("/login", assignToken);
+
+/************================ RUTAS ACCESIBLES SOLO SI ESTAS AUTENTIFICADP ===============****************/
 //Rutas de usuarios
 router.get("/users", getUserList);
 router.get("/users/:userId", getUser);
-
-router.post("/login", authentification, postLogin);
 
 //Rutas de Empleados
 router.get("/employees", getEmployees);

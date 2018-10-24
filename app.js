@@ -2,11 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const router = require("./routes/index.js");
+const cors = require("cors");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+app.use(cors());
 
 //Encabezados
 app.use((req, resp, next) => {
