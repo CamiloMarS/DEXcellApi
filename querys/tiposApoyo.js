@@ -5,6 +5,16 @@ const typesSupport = {
         FROM Tipo_apoyo;
     `;
   },
+  getTypeSupport: id => {
+    if (!Number.isInteger(id)) {
+      return null;
+    }
+    return `
+      SELECT nombre 
+      FROM tipo_apoyo
+      WHERE id_tipoapoyo = ${id};
+    `;
+  },
   insertTypeSupport: dataTypeSupport => {
     if (Object.keys(dataTypeSupport).length <= 0) {
       console.log(dataTypeSupport, "==> no valido!");

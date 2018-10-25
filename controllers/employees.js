@@ -46,30 +46,37 @@ function getInactiveEmployees(req, resp) {
 
 //Consultar los empleados, con su perfil y nivel
 function getEmployees(req, resp) {
-  let conn = connToDB();
   let sql = employeesInformacion;
 
-  conn.query(sql, (err, result) => {
-    if (err) {
-      resp.status({ status: 401, message: err });
-      return;
-    }
-
-    const data = result.rowCount;
-
-    if (data > 0) {
-      const employees = result.rows.map((e, i) => {
-        const { employeeId, name, lastname, profile, level, dateAdmission } = e;
-        //Dar formato segun el Front
-        return {
+  query(sql, req, resp).then(result => {
+    if (result.length > 0) {
+      const list = result.map(employee => {
+        const {
           employeeId,
-          fullname: `${name} ${lastname}`,
+          name,
+          lastname,
+          dateAdmission,
+          saldo_ingles,
+          saldo_informacion,
           profile,
           level,
-          dateAdmission: dateAdmission.toLocaleDateString("en-US")
+          active
+        } = employee;
+
+        return {
+          id: employeeId,
+          name,
+          lastname,
+          dateAdmission: dateAdmission.toLocaleDateString("en-US"),
+          englishBalance: saldo_ingles,
+          trainingBalance: saldo_informacion,
+          profile,
+          level,
+          active
         };
       });
-      resp.status(200).send(employees);
+
+      resp.status(200).send(list);
     }
   });
 
@@ -123,7 +130,34 @@ function getHistoryCertificationsEmployee(req, resp) {
       .send({ code: 300, message: "Invalid employee ID or is Null!" });
     return;
   }
-  query(queryCertifations(employeeId), req, resp);
+  query(queryCertifations(employeeId), req, resp).then(data => {
+    const history = data.map(item => {
+      const {
+        Empleado,
+        Apoyo,
+        certificacion,
+        organismo,
+        costo,
+        costo_examen,
+        observaciones,
+        fecha_solicitud,
+        asignado_por
+      } = item;
+
+      return {
+        employee: Empleado,
+        type: Apoyo,
+        name: certificacion,
+        organism: organismo,
+        cost: costo,
+        examCost: costo_examen,
+        obeservations: observaciones,
+        requestDate: fecha_solicitud.toLocaleDateString("en-US"),
+        assignedBy: asignado_por
+      };
+    });
+    resp.status(200).send(history);
+  });
 }
 
 module.exports = {

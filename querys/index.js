@@ -8,8 +8,9 @@ const query = (sql, request, response) => {
       .query(sql)
       .then(result => {
         disconnectDB(conn); //Cerrar la conexion
-        if (result.rowCount > 0) return result.rows;
-        else
+        if (result.rowCount > 0) {
+          return result.rows;
+        } else
           response.status(404).send({ status: 404, message: "No encontrado!" });
       })
       .catch(err => {

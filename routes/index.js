@@ -41,17 +41,17 @@ router.get("/users/:userId", validToken, getUser); // :)
 router.get("/employees", validToken, getEmployees); // :)
 router.get("/employees/history/:employeeId", validToken, getHistoryEmployee); // :)
 
-// router.get(
-//   "/employees/history/certifications/:employeeId",
-//   validToken,
-//   getHistoryCertificationsEmployee
-// );
+router.get(
+  "/employees/history/certifications/:employeeId",
+  validToken,
+  getHistoryCertificationsEmployee
+); // :)
 
-// //Rutas de certificaciones
-router.get("/certifications", validToken, getCertificationsList);
-// router.get("/certifications/:idCertification", validToken, getCertification);
+//Rutas de certificaciones
+router.get("/certifications", validToken, getCertificationsList); // :)
+router.get("/certifications/:idCertification", validToken, getCertification); // :)
 
-// //Rutas para apoyo de empleados
-// router.post("/employeessupport", insertSupportEmployee);
+//Rutas para apoyo de empleados
+router.post("/employees/add/support", validToken, insertSupportEmployee);
 
 module.exports = router;

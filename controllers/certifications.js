@@ -17,7 +17,13 @@ function getCertificationsList(req, resp) {
         } = current;
 
         return {
-          id: id_certificacion
+          id: id_certificacion,
+          organism: organismo,
+          certification: certificacion,
+          examCost: costo_examen,
+          examSupport: apoyo_examen,
+          bonusCertification: bono_certificacion,
+          linkValidation: link_validacion
         };
       });
       resp.status(200).send(list);
@@ -33,10 +39,38 @@ function getCertification(req, resp) {
       .send({ status: 400, message: "Certification ID no valido!" });
     return;
   }
-  query(certifications.getCertification(idCertification), req, resp);
+  query(certifications.getCertification(idCertification), req, resp).then(
+    result => {
+      const {
+        id_certificacion,
+        organismo,
+        certificacion,
+        costo_examen,
+        apoyo_examen,
+        bono_certificacion,
+        link_validacion
+      } = result[0];
+
+      resp.status(200).send({
+        id: id_certificacion,
+        organism: organismo,
+        certification: certificacion,
+        examCost: costo_examen,
+        examSupport: apoyo_examen,
+        bonusCertification: bono_certificacion,
+        linkValidation: link_validacion
+      });
+    }
+  );
+}
+
+function postCertification(req, resp) {
+  const certification = req.body;
+  console.log(certification);
 }
 
 module.exports = {
   getCertificationsList,
-  getCertification
+  getCertification,
+  postCertification
 };

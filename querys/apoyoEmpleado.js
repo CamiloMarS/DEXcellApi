@@ -1,21 +1,22 @@
 const apoyo_empleado = {
-  insert_apoyo: data_apoyo => {
+  insert_support: data_apoyo => {
     if (Object.keys(data_apoyo).length <= 0) {
       console.log("No hay valores que insertar!");
       return;
     }
     let {
-      costo,
-      observaciones,
-      fecha_solicitud,
-      usuario,
-      empleado,
-      tipo_apoyo
+      employeeId,
+      supportType,
+      registeredBy,
+      selectedDay,
+      observation,
+      courseName,
+      numberFormat
     } = data_apoyo;
 
     return `
     INSERT INTO Apoyo_empleado (costo, observaciones, fecha_solicitud, usuario, empleado, tipo_apoyo)
-    VALUES (${costo}, '${observaciones}', '${fecha_solicitud}',${usuario}, ${empleado}, ${tipo_apoyo});`;
+    VALUES (${numberFormat}, '[${courseName}] ${observation}', '${selectedDay}',${registeredBy}, ${employeeId}, ${supportType});`;
   },
   getListSupport: () => {
     return `

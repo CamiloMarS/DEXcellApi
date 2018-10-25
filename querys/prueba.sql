@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION register_new_support (IN empleado int, IN registrado_por int, IN tipoapoyo int, IN costo float, IN observaciones VARCHAR(100), IN fecha_solicitud DATE)
-RETURNS VARCHAR AS $$
+RETURNS FLOAT AS $$
 	-- Declaracion de variables
 	DECLARE empleado_existente BOOLEAN; -- en uso
 	DECLARE nombre_apoyo VARCHAR; -- en uso
@@ -27,13 +27,13 @@ RETURNS VARCHAR AS $$
 	    IF saldo_disponible = TRUE THEN
 		-- El empleado cumple todo, registrar apoyo
 		
-		SELECT substract_balance_employee(1, 2500, 'formacion'); -- obtien el nuevo saldo del empleado
+		SELECT substract_balance_employee(1, 2500, 'formacion') INTO saldo_empleado; -- obtien el nuevo saldo del empleado
 		
 	    END IF;
 	    
 	 ELSE 
 	    respuesta:= 'Empleado no existe!';
 	 END IF;
-	 RETURN respuesta; --Salir
+	 RETURN saldo_empleado; --Salir
 	END;
 $$ LANGUAGE PLpgSQL;

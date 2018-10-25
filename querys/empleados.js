@@ -18,6 +18,13 @@ module.exports = {
   ON E.Perfil = P.id_perfil
   INNER JOIN Nivel AS N
   ON E.Nivel = N.id_nivel`,
+  getEmployee: function(id, typeBalance, validityBalance) {
+    if (!Number.isInteger(id)) {
+      return { message: "No es un Id valido!" };
+    }
+    //El id es valido
+    return `SELECT activo, ${typeBalance} as "saldo", ${validityBalance} as "vigencia" FROM Empleados WHERE id_empleado = ${id}`;
+  },
   historyEmployee: idEmployee => {
     return `
     SELECT ap.costo, ap.observaciones, ap.fecha_solicitud, us.nombre||', '||us.apellidos AS "asignado_por", tp.nombre as "tipo_apoyo", tp.descripcion
@@ -31,7 +38,7 @@ module.exports = {
   },
   queryCertifations: idEmployee => {
     return `
-      SELECT e.nombre||' '||e.apellidos AS "Empleado", tp.nombre as "Apoyo", cc.certificacion,  cc.organismo, ae.costo, cc.costo_examen, ae.observaciones, ae.fecha_solicitud,  du.nombre AS "Asignado por"
+      SELECT e.nombre||' '||e.apellidos AS "Empleado", tp.nombre as "Apoyo", cc.certificacion,  cc.organismo, ae.costo, cc.costo_examen, ae.observaciones, ae.fecha_solicitud,  du.nombre AS "asignado_por"
       FROM Historial_certificaciones AS ha -- primera tabla
       INNER JOIN Apoyo_empleado AS ae -- Segunda tabla
       ON ha.id_apoyoempleado = ae.id_apoyo
