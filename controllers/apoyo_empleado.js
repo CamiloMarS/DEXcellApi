@@ -23,7 +23,7 @@ const validateEmployeeBalance = async (
   //Formar la cadena SQL
   let sql;
   const columns = { column1: "", column2: "" };
-  if (typeSupport !== "Inglés") {
+  if (typeSupport === "Inglés") {
     columns.column1 = "saldo_ingles";
     columns.column2 = "vigencia_saldo_idioma";
     sql = getEmployee(idEmployee, columns.column1, columns.column2);
@@ -39,15 +39,15 @@ const validateEmployeeBalance = async (
     return await employee;
   }
   const { activo, ...params } = (employee = await consultaPrueba())[0]; //Datos del empleado
-  const balance = params.saldo;
-  const vialidity = params.vigencia.toLocaleDateString("en-US").toString();
+  const balance = params.saldo !== null ? params.saldo : null;
+  const vialidity =
+    params.vigencia !== null
+      ? params.vigencia.toLocaleDateString("en-US").toString()
+      : null;
 
   /** Validar vigencia del saldo del empleado */
   const currentEmployeeBalance = () => {
-    const dateNow = moment().format("DD-MM-YYYY");
-    d = vialidity.split("/");
-    const correctFormatDate = `${d[0]}-${d[1]}-${d[2]}`;
-    console.log(balance);
+    console.log(balance, vialidity);
   };
 
   currentEmployeeBalance();
